@@ -1,0 +1,14 @@
+@mixin box-shadow {
+    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    box-shadow: 2px 4px 10px 1px rgba(0,0,0, 0.47);
+    // -webkit-box-shadow: 7px 8px 16px 0px rgba(0,0,0,0.82); 
+    // box-shadow: 7px 8px 16px 0px rgba(0,0,0,0.82);
+}
+
+@mixin absolute-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}

@@ -51,11 +51,8 @@ export default {
             }
         })
 
-        // const router = useRouter()
-
         function logout() {
             store.dispatch("auth/logout")
-            // router.replace("/auth")
         }
 
         return {

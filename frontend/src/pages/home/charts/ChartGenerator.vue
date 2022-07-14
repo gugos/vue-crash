@@ -3,59 +3,47 @@
         <base-dialog :show="!!error" title="An error occurred" @close="handleError">
             {{ error }}
         </base-dialog>
-        <base-card>
-            <BarChart :labels="labels" :datasets="datasets" :height="300" />
-        </base-card>
-        <base-card>
-            <PieChart :labels="labels" :datasets="datasets" :height="300" />
-        </base-card>
-        <div class="spinner">
-            <base-spinner v-if="isLoading"></base-spinner>
-        </div>
+        <section class="charts">
+            <base-card class="left">
+                <BarChart :labels="labels" :datasets="datasets" :height="300" />
+            </base-card>
+            <base-card class="right">
+                <PieChart :labels="labels" :datasets="datasets" :height="300" />
+            </base-card>
+            <div class="spinner">
+                <base-spinner v-if="isLoading"></base-spinner>
+            </div>
+        </section>
     </div>
 </template>
 
 <script>
-import axios from "axios"
-import { ref } from "vue"
+import { ref, watch, toRefs } from "vue"
 import BarChart from "../../../components/charts/BarChart.vue"
 import PieChart from "../../../components/charts/PieChart.vue"
+import { getChartData } from "./queryManager.js"
 
 export default {
     components: {
         BarChart,
         PieChart
     },
-    setup() {
-        const base_url = "https://play.clickhouse.com"
-        const default_params = {
-            add_http_cors_header: 1,
-            user: "play",
-            password: "",
-            default_format: "JSONCompact",
-            max_result_rows: 1000,
-            max_result_bytes: 10000000,
-            result_overflow_mode: "break"
-        }
-
+    props: {
+        filter: {
+            type: Object,
+            default: () => {}
+        },
+    },
+    setup(props) {
         const error = ref(null)
         const isLoading = ref(false)
         const datasets = ref([])
+        const { filter } = toRefs(props)
 
         async function getData() {
             isLoading.value = true
             try {
-                const response = await axios.get(base_url, {
-                    params: {
-                        ...default_params,
-                        query: 
-                        `select m, sum(cnt) from (
-                            select toMonth(file_time) as m, count(toMonth(file_time)) as cnt
-                            from default.github_events
-                            where file_time between toDateTime('2021-01-01 00:00:00') and toDateTime('2021-12-31 00:00:00') group by file_time
-                        ) as t group by m order by m`
-                    }
-                })
+                const response = await getChartData(filter.value)
 
                 datasets.value = [
                     {
@@ -78,6 +66,10 @@ export default {
 
         const labels = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"]
+
+        watch(filter, function() {
+            getData()
+        })
         
         return {
             isLoading,
@@ -94,10 +86,40 @@ export default {
 @import "../../../assets/styles/variables.scss";
 
 .chartgenerator {
-    position: relative;
+    .charts {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
 
-    .spinner {
-        @include absolute-center;
+        .left {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .right {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .spinner {
+            @include absolute-center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .charts {
+            display: block;
+            padding-bottom: 1rem;
+
+            .left {
+                padding-bottom: 1rem;
+            }
+
+            .right {
+                padding-bottom: 1rem;
+            }
+        }
     }
 }
 </style>

@@ -3,9 +3,10 @@
         <base-dialog :show="!!error" title="An error occurred" @close="handleError">
             {{ error }}
         </base-dialog>
+        <DataFilters @set-filter="setFilter" />
         <section class="clickhousetest">
             <div class="table-wrapper">
-                <table @scroll="handleScroll">
+                <table @scroll="handleScroll" ref="tableRef">
                     <thead>
                         <tr>
                             <th>file_time</th>
@@ -76,32 +77,23 @@
             </div>
         </section>
         <section>
-            <ChartGenerator />
+            <ChartGenerator :filter="filter" />
         </section>
     </base-container>
 </template>
 
 <script>
-import axios from "axios"
 import { ref } from "vue"
+import DataFilters from "./DataFilters.vue"
 import ChartGenerator from "./ChartGenerator.vue"
+import { getRowCount, getTableData } from "./queryManager.js"
 
 export default {
     components: {
+        DataFilters,
         ChartGenerator
     },
     setup() {
-        const base_url = "https://play.clickhouse.com"
-        const default_params = {
-            add_http_cors_header: 1,
-            user: "play",
-            password: "",
-            default_format: "JSONCompact",
-            max_result_rows: 1000,
-            max_result_bytes: 10000000,
-            result_overflow_mode: "break"
-        }
-
         let rowCount = 0
         const offsetStep = 100
         const limit = 200
@@ -109,17 +101,13 @@ export default {
         const tableData = ref(null)
         const isLoading = ref(false)
         const error = ref(null)
+        const filter = ref(null)
+        const tableRef = ref(null)
 
         async function setRowCount() {
             isLoading.value = true
             try {
-                const response = await axios.get(base_url, {
-                    params: {
-                        ...default_params,
-                        query: "select count(*) from default.github_events"
-                    }
-                })
-
+                const response = await getRowCount(filter.value)
                 rowCount = +response.data.data
             } catch(err) {
                 error.value = err
@@ -131,13 +119,7 @@ export default {
         async function setTableData() {
             isLoading.value = true
             try {
-                const response = await axios.get(base_url, {
-                    params: {
-                        ...default_params,
-                        query: `select * from default.github_events limit ${offset}, ${limit}`
-                    }
-                })
-
+                const response = await getTableData(offset, limit, filter.value)
                 tableData.value = response.data.data
             } catch(err) {
                 error.value = err
@@ -178,12 +160,23 @@ export default {
             }
         }
 
+        function setFilter(newFilter) {
+            filter.value = (newFilter === null) ? null : newFilter
+            setRowCount()
+            setTableData()
+            offset = 0
+            tableRef.value.scrollTop = 0
+        }
+
         return {
             tableData,
             isLoading,
             error,
             handleError,
-            handleScroll
+            handleScroll,
+            filter,
+            setFilter,
+            tableRef
         }
     }
 }

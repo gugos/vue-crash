@@ -39,10 +39,10 @@ export default {
     emits: ["close"],
     methods: {
         tryClose() {
-        if (this.fixed) {
-            return;
-        }
-        this.$emit("close");
+            if (this.fixed) {
+                return;
+            }
+            this.$emit("close");
         },
     },
 };

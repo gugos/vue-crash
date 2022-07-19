@@ -1,4 +1,5 @@
 import axios from "axios"
+import { generateWhereClause } from "@/utils/generateWhereClause.js"
 
 const base_url = "https://play.clickhouse.com"
 const default_params = {
@@ -11,15 +12,15 @@ const default_params = {
     result_overflow_mode: "break"
 }
 
-export async function getChartData(filter) {
-    let whereClause = getWhereClause(filter)
+export function getChartData(filter) {
+    let whereClause = generateWhereClause(filter)
     if(whereClause !== "") {
         whereClause += " and "
     } else {
         whereClause = "where"
     }
 
-    return await axios.get(base_url, {
+    return axios.get(base_url, {
         params: {
             ...default_params,
             query: 
@@ -32,40 +33,22 @@ export async function getChartData(filter) {
     })
 }
 
-export async function getTableData(offset, limit, filter) {
-    return await axios.get(base_url, {
+export function getTableData(offset, limit, filter) {
+    return axios.get(base_url, {
         params: {
             ...default_params,
             query: 
-            `select * from default.github_events ${getWhereClause(filter)} limit ${offset}, ${limit}`
+            `select * from default.github_events ${generateWhereClause(filter)} limit ${offset}, ${limit}`
         }
     })
 }
 
-export async function getRowCount(filter) {
-    return await axios.get(base_url, {
+export function getRowCount(filter) {
+    return axios.get(base_url, {
         params: {
             ...default_params,
             query: 
-            "select count(*) from default.github_events" + getWhereClause(filter)
+            "select count(*) from default.github_events" + generateWhereClause(filter)
         }
     })
-}
-
-function getWhereClause(filter) {
-    let where = ""
-    if(filter !== null) {
-        if(filter.event_type.length !== 0 && filter.ref_type.length !== 0) {
-            where = ` where event_type in ('${filter.event_type.join("','")}') and
-                    ref_type in ('${filter.ref_type.join("','")}')` 
-        } else if(filter.event_type.length !== 0) {
-            where = ` where event_type in ('${filter.event_type.join("','")}')`
-        } else if(filter.ref_type.length !== 0) {
-            where = ` where ref_type in ('${filter.ref_type.join("','")}')`
-        } else {
-            where = ""
-        }
-    }
-
-    return where
 }

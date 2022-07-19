@@ -7,7 +7,7 @@ const colorRangeInfo = {
 }
 
 function calculatePoint(i, intervalSize, colorRangeInfo) {
-    const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo;
+    const { colorStart, colorEnd, useEndAsStart } = colorRangeInfo
     return (useEndAsStart
         ? (colorEnd - (i * intervalSize))
         : (colorStart + (i * intervalSize)))
@@ -18,10 +18,10 @@ export function uniqueColorList(dataLength) {
         return ["#000000"]
     }
 
-    const { colorStart, colorEnd } = colorRangeInfo;
-    const colorRange = colorEnd - colorStart;
+    const { colorStart, colorEnd } = colorRangeInfo
+    const colorRange = colorEnd - colorStart
     const intervalSize = colorRange / dataLength
-    const colorArray = [];
+    const colorArray = []
 
     if(dataLength === 1) {
         colorArray.push("#781c6d")

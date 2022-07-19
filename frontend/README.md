@@ -1,4 +1,4 @@
-# side-nav-menu
+# vue-crash
 
 ## Project setup
 ```

@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router"
 
 import UserAuth from "./pages/auth/UserAuth.vue"
-import ChartsList from "./pages/home/ChartsList.vue"
-import ClickhouseTest from "./pages/home/charts/ClickhouseTest.vue"
+import VisualsList from "./pages/home/VisualsList.vue"
+import ClickhouseTest from "./pages/home/visuals/ClickhouseTest.vue"
+import D3Test from "./pages/home/visuals/D3Test.vue"
 import UserSettings from "./pages/settings/UserSettings.vue"
 import AboutService from "./pages/about/AboutService.vue"
 import NotFound from "./pages/NotFound.vue"
@@ -12,8 +13,9 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: "/", redirect: "/home" },
-        { path: "/home", component: ChartsList },
+        { path: "/home", component: VisualsList },
         { path: "/home/clickhouse-test", component: ClickhouseTest },
+        { path: "/home/d3-test", component: D3Test },
         { path: "/settings", component: UserSettings },
         { path: "/about", component: AboutService },
         { path: "/auth", component: UserAuth },

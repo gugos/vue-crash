@@ -1,56 +1,54 @@
 <template>
     <base-container class="charts">
         <section>
-            <div class="item">
-                <router-link to="/home/clickhouse-test">
-                    <base-card class="card">
-                        <img src="../../assets/img/clickhouse.svg" width="80" height="80">
-                    </base-card>
-                    <h4>Clickhouse test</h4>
-                </router-link>
-            </div>
-            <div class="item">
+            <router-link to="/home/clickhouse-test">
+                <base-card class="card">
+                    <img src="../../assets/img/clickhouse.svg" width="80" height="80">
+                </base-card>
+                <h4>Clickhouse test</h4>
+            </router-link>
+            <router-link to="/home/d3-test">
+                <base-card class="card">
+                    <img src="../../assets/img/d3.svg" width="80" height="80">
+                </base-card>
+                <h4>D3 test</h4>
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
+            </router-link>
+            <router-link to="#" class="disabled">
                 <base-card class="card disabled">
                     <font-awesome-icon class="icon" icon="lock" />
                 </base-card>
                 <h4>TODO</h4>
-            </div>
-            <div class="item">
-                <base-card class="card disabled">
-                    <font-awesome-icon class="icon" icon="lock" />
-                </base-card>
-                <h4>TODO</h4>
-            </div>
+            </router-link>
         </section>
     </base-container>
 </template>
@@ -76,11 +74,17 @@ export default {
     // justify-content: space-between;
     // grid-gap: 20px;
 
-    .item {
+    a {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        text-decoration: none;
+        color: black;
+
+        &.disabled {
+            pointer-events: none;
+        }
 
         .card {
             width: 100px;
@@ -88,17 +92,8 @@ export default {
             margin-bottom: 1rem;
             position: relative;
             cursor: pointer;
-        
-            &:hover {
-                box-shadow: none;
-                border: 1px solid #333;
-                width: 98px;
-                height: 98px;
-                background-color: #ccc;
-            }
 
             &.disabled {
-                pointer-events: none;
                 background-color: rgb(151, 151, 151);
             }
 
@@ -113,10 +108,20 @@ export default {
             }
         }
 
-        a {
-            text-decoration: none;
-            color: black;
+        &:hover {
+            .card, .card:hover {
+                box-shadow: none;
+                border: 1px solid #333;
+                width: 98px;
+                height: 98px;
+                background-color: #ccc;
+            }
         }
+
+        // a {
+        //     text-decoration: none;
+        //     color: black;
+        // }
     }
 
     // .fill-space {

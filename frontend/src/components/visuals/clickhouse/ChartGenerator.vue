@@ -19,8 +19,8 @@
 
 <script>
 import { ref, watch, toRefs } from "vue"
-import BarChart from "../../../components/charts/BarChart.vue"
-import PieChart from "../../../components/charts/PieChart.vue"
+import BarChart from "../../charts/BarChart.vue"
+import PieChart from "../../charts/PieChart.vue"
 import { getChartData } from "./queryManager.js"
 
 export default {

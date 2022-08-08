@@ -84,9 +84,9 @@
 
 <script>
 import { ref } from "vue"
-import DataFilters from "./DataFilters.vue"
-import ChartGenerator from "./ChartGenerator.vue"
-import { getRowCount, getTableData } from "./queryManager.js"
+import DataFilters from "../../../components/visuals/clickhouse/DataFilters.vue"
+import ChartGenerator from "../../../components/visuals/clickhouse/ChartGenerator.vue"
+import { getRowCount, getTableData } from "../../../components/visuals/clickhouse/queryManager.js"
 
 export default {
     components: {

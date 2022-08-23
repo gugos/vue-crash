@@ -81,37 +81,37 @@ export default {
             @include absolute-center;
             z-index: 10;
         }
-    }
 
-    .form-control {
-        margin: 0.5rem 0;
-    }
+        .form-control {
+            margin: 0.5rem 0;
+        }
 
-    label {
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
+        label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
 
-    input,
-    textarea {
-        display: block;
-        width: 100%;
-        font: inherit;
-        border: 1px solid #ccc;
-        padding: 0.15rem;
-    }
+        input,
+        textarea {
+            display: block;
+            width: 100%;
+            font: inherit;
+            border: 1px solid #ccc;
+            padding: 0.15rem;
+        }
 
-    input:focus,
-    textarea:focus {
-        border-color: #333;
-        background-color: #faf6ff;
-        outline: none;
-    }
+        input:focus,
+        textarea:focus {
+            border-color: #333;
+            background-color: #faf6ff;
+            outline: none;
+        }
 
-    p {
-        color: red;
-        padding: 10px 0px;
-    }
+        p {
+            color: red;
+            padding: 10px 0px;
+        }
+    } 
 }
 </style>

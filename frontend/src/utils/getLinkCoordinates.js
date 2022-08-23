@@ -1,130 +1,27 @@
-/**
-    TODO
-    Refactor
- */
-export function getLinkCoordinates(parentNode, childNode, padding = 20) {
+export function getLinkCoordinates(parentNode, childNode, padding = 10) {
     const linkDirection = getLinkDirection(parentNode, childNode)
-    
     let coordinates = []
 
     switch(linkDirection) {
         case Direction.TOP_TO_RIGHT_BOTTOM:
-            if(isClose(parentNode, childNode, padding) || 
-            childNode.y - (parentNode.y + parentNode.height) < padding * 3) {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
-                    coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                } else {
-                    coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                }
-            } else {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: childNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: childNode.x, y: childNode.y })
-            }
-        break
+            coordinates = topToRightBottom(parentNode, childNode, padding)
+            return coordinates
         case Direction.BOTTOM_TO_RIGHT_TOP:
         case Direction.LEFT_TO_RIGHT:
-            if(isClose(parentNode, childNode, padding)) {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
-                    coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                } else {
-                    coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                }
-            } else {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: parentNode.x + parentNode.width / 2 + padding, y: parentNode.y + padding })
-                coordinates.push({ x: parentNode.x + parentNode.width / 2 + padding, y: childNode.y - padding })
-                coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                coordinates.push({ x: childNode.x, y: childNode.y })
-            }
-        break
+            coordinates = bottomToRightTop(parentNode, childNode, padding)
+            return coordinates
         case Direction.BOTTOM_TO_LEFT_TOP:
         case Direction.RIGHT_TO_LEFT:
-            if(isClose(parentNode, childNode, padding)) {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
-                    coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                } else {
-                    coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                }
-            } else {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: parentNode.x - parentNode.width / 2 - padding, y: parentNode.y + padding })
-                coordinates.push({ x: parentNode.x - parentNode.width / 2 - padding, y: childNode.y - padding })
-                coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                coordinates.push({ x: childNode.x, y: childNode.y })
-            }
-        break
+            coordinates = bottomToLeftTop(parentNode, childNode, padding)
+            return coordinates
         case Direction.TOP_TO_LEFT_BOTTOM:
-            if(isClose(parentNode, childNode, padding) || 
-            childNode.y - (parentNode.y + parentNode.height) < padding * 3) {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
-                    coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: parentNode.y + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                } else {
-                    coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y + childNode.height + padding })
-                    coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y - padding })
-                    coordinates.push({ x: childNode.x, y: childNode.y })
-                }
-            } else {
-                shiftCoordinates(parentNode, childNode)
-                coordinates.push({ x: parentNode.x, y: parentNode.y })
-                coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: childNode.x, y: parentNode.y + padding })
-                coordinates.push({ x: childNode.x, y: childNode.y })
-            }
-        break
+            coordinates = topToLeftBottom(parentNode, childNode, padding)
+            return coordinates
         case Direction.TOP_TO_BOTTOM:
-        case Direction.BOTTOM_TO_TOP:
-            shiftCoordinates(parentNode, childNode)
-            coordinates.push({ x: parentNode.x, y: parentNode.y })
-            coordinates.push({ x: childNode.x, y: childNode.y })
-        break
+        // case Direction.BOTTOM_TO_TOP:
+            coordinates = topToBottom(parentNode, childNode)
+            return coordinates
     }
-
-    return coordinates
 }
 
 const Direction = {
@@ -133,7 +30,7 @@ const Direction = {
     BOTTOM_TO_LEFT_TOP: 2,
     TOP_TO_LEFT_BOTTOM: 3,
     TOP_TO_BOTTOM: 4,
-    BOTTOM_TO_TOP: 5,
+    // BOTTOM_TO_TOP: 5,
     LEFT_TO_RIGHT: 6,
     RIGHT_TO_LEFT: 7,
     SAME_POS: 8
@@ -156,9 +53,9 @@ function getLinkDirection(parentNode, childNode) {
     if(nodeXCenter(parentNode) === nodeXCenter(childNode) && parentNode.y < childNode.y) {
         linkDirection = Direction.TOP_TO_BOTTOM
     } else
-    if(nodeXCenter(parentNode) === nodeXCenter(childNode) && parentNode.y > childNode.y) {
-        linkDirection = Direction.BOTTOM_TO_TOP
-    } else
+    // if(nodeXCenter(parentNode) === nodeXCenter(childNode) && parentNode.y > childNode.y) {
+    //     linkDirection = Direction.BOTTOM_TO_TOP
+    // } else
     if(nodeXCenter(parentNode) < nodeXCenter(childNode) && parentNode.y === childNode.y) {
         linkDirection = Direction.LEFT_TO_RIGHT
     } else
@@ -169,14 +66,155 @@ function getLinkDirection(parentNode, childNode) {
     return linkDirection
 }
 
+function topToRightBottom(parentNode, childNode, padding) {
+    let coordinates = []
+    if(isClose(parentNode, childNode, padding) || 
+    childNode.y - (parentNode.y + parentNode.height) < padding * 2) {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        if(parentNode.y > childNode.y + childNode.height) {
+            coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        } else {
+            coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        }
+    } else {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+        coordinates.push({ x: childNode.x, y: parentNode.y + padding })
+        coordinates.push({ x: childNode.x, y: childNode.y })
+    }
+
+    return coordinates
+}
+
+function bottomToRightTop(parentNode, childNode, padding) {
+    let coordinates = []
+    if(isClose(parentNode, childNode, padding)) {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
+            coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        } else {
+            coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        }
+    } else {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+        if(childNode.width > parentNode.width) {
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x + childNode.width / 2 + padding, y: childNode.y - padding })
+        } else {
+            coordinates.push({ x: parentNode.x + parentNode.width / 2 + padding, y: parentNode.y + padding })
+            coordinates.push({ x: parentNode.x + parentNode.width / 2 + padding, y: childNode.y - padding })
+        }
+        coordinates.push({ x: childNode.x, y: childNode.y - padding })
+        coordinates.push({ x: childNode.x, y: childNode.y })
+    }
+
+    return coordinates
+}
+
+function bottomToLeftTop(parentNode, childNode, padding) {
+    let coordinates = []
+    if(isClose(parentNode, childNode, padding)) {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        if(parentNode.y + parentNode.height > childNode.y + childNode.height) {
+            coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        } else {
+            coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        }
+    } else {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+        if(childNode.width > parentNode.width) {
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
+        } else {
+            coordinates.push({ x: parentNode.x - parentNode.width / 2 - padding, y: parentNode.y + padding })
+            coordinates.push({ x: parentNode.x - parentNode.width / 2 - padding, y: childNode.y - padding })
+        }
+        coordinates.push({ x: childNode.x, y: childNode.y - padding })
+        coordinates.push({ x: childNode.x, y: childNode.y })
+    }
+
+    return coordinates
+}
+
+function topToLeftBottom(parentNode, childNode, padding) {
+    let coordinates = []
+    if(isClose(parentNode, childNode, padding) || 
+    childNode.y - (parentNode.y + parentNode.height) < padding * 2) {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        if(parentNode.y > childNode.y + childNode.height) {
+            coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: parentNode.y + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        } else {
+            coordinates.push({ x: parentNode.x, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y + childNode.height + padding })
+            coordinates.push({ x: childNode.x - childNode.width / 2 - padding, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y - padding })
+            coordinates.push({ x: childNode.x, y: childNode.y })
+        }
+    } else {
+        shiftCoordinates(parentNode, childNode)
+        coordinates.push({ x: parentNode.x, y: parentNode.y })
+        coordinates.push({ x: parentNode.x, y: parentNode.y + padding })
+        coordinates.push({ x: childNode.x, y: parentNode.y + padding })
+        coordinates.push({ x: childNode.x, y: childNode.y })
+    }
+
+    return coordinates
+}
+
+function topToBottom(parentNode, childNode) {
+    let coordinates = []
+    shiftCoordinates(parentNode, childNode)
+    coordinates.push({ x: parentNode.x, y: parentNode.y })
+    coordinates.push({ x: childNode.x, y: childNode.y })
+    return coordinates
+}
+
 function nodeXCenter(node) {
     return node.x + node.width / 2
 }
 
 function shiftCoordinates(parentNode, childNode) {
-    parentNode.y += parentNode.height
+    parentNode.y += parentNode.height + 1
     parentNode.x += parentNode.width / 2
     childNode.x += childNode.width / 2
+    childNode.y -= 1
 }
 
 function isClose(parentNode, childNode, padding) {
